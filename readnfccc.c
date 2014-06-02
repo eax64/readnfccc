@@ -16,6 +16,7 @@ $ gcc readnfccc.c -lnfc -o readnfccc
 
 */
 
+typedef unsigned char byte_t;
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -37,7 +38,7 @@ void show(size_t recvlg, byte_t *recv) {
 }
 
 int main(int argc, char **argv) {
-	nfc_device_t* pnd;
+	nfc_device* pnd;
 
 	byte_t abtRx[MAX_FRAME_LEN];
 	byte_t abtTx[MAX_FRAME_LEN];
@@ -53,8 +54,10 @@ int main(int argc, char **argv) {
 
 	unsigned char *res, output[50], c, amount[10],msg[100];
 	unsigned int i, j, expiry;
+	nfc_context *context;
 
-	pnd = nfc_connect(NULL);
+	nfc_init(&context);
+	pnd = nfc_open(context, NULL);
 	if (pnd == NULL) {
 		printf("Unable to connect to NFC device.\n");
 		return(1);
@@ -172,11 +175,12 @@ int main(int argc, char **argv) {
 		for(i=1;i<=20;i++) {
 			READ_PAYLOG_VISA[4] = i;
 			szRx = sizeof(abtRx);
-			if (!pn53x_transceive(pnd, READ_PAYLOG_VISA, sizeof(READ_PAYLOG_VISA), abtRx, &szRx, NULL)) {
+			int out;
+			if (!(out = pn53x_transceive(pnd, READ_PAYLOG_VISA, sizeof(READ_PAYLOG_VISA), abtRx, &szRx, NULL))) {
 					nfc_perror(pnd, "READ_RECORD");
 					return(1);
 			}
-			if(szRx==18) { // Non-empty transaction
+			if(out==18) { // Non-empty transaction
 				//show(szRx, abtRx);
 				res = abtRx;
 
@@ -202,11 +206,12 @@ int main(int argc, char **argv) {
 		for(i=1;i<=20;i++) {
 			READ_PAYLOG_MC[4] = i;
 			szRx = sizeof(abtRx);
-			if (!pn53x_transceive(pnd, READ_PAYLOG_MC, sizeof(READ_PAYLOG_MC), abtRx, &szRx, NULL)) {
+			int out;
+			if (!(out = pn53x_transceive(pnd, READ_PAYLOG_MC, sizeof(READ_PAYLOG_MC), abtRx, &szRx, NULL))) {
 					nfc_perror(pnd, "READ_RECORD");
 					return(1);
 			}
-			if(szRx==18) { // Non-empty transaction
+			if(out==18) { // Non-empty transaction
 				//show(szRx, abtRx);
 				res = abtRx;
 
@@ -232,7 +237,7 @@ int main(int argc, char **argv) {
 		printf("-------------------------\n");
 	}
 
-	nfc_disconnect(pnd);
+	nfc_close(pnd);
 
 	return(0);
 }
