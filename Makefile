@@ -3,12 +3,12 @@ RM		=	rm -f
 CFLAGS		=	-W -Wall -Wextra -Wno-pointer-sign -g
 LDFLAGS		=	-lnfc
 
-SRC		=	readnfccc.c \
-			codes.c
+SRC		=	src/readnfccc.c \
+			src/codes.c
 
 OBJ		=	$(SRC:.c=.o)
 
-NAME		=	readnfcccv
+NAME		=	readnfccc
 
 all: $(NAME)
 
