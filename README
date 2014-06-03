@@ -1,7 +1,7 @@
 readnfccc
 ---------
 
-The original author is Aaron Zauner (@azet).
+The original author is Renaud Lifchitz (https://code.google.com/p/readnfccc/).
 This fork is to enable compatibility with last libnfc version, and to add some features.
 
 ========
