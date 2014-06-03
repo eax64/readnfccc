@@ -1,6 +1,11 @@
 readnfccc
 ---------
 
+The original author is Aaron Zauner (@azet).
+This fork is to enable compatibility with last libnfc version, and to add some features.
+
+========
+
 * Introduction:
 "Quick and dirty" proof-of-concept
 Open source tool developped and showed for Hackito Ergo Sum 2012 - "Hacking the NFC credit cards for fun and debit ;)"
