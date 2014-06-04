@@ -56,6 +56,7 @@ void show(size_t recvlg, uint8_t *recv)
 {
   size_t i;
 
+  return;
   printf("< ");
   for(i = 0 ; i < recvlg ; i++) {
     printf("%02x ",(unsigned int) recv[i]);
@@ -149,7 +150,7 @@ void		get_history(nfc_device *pnd, enum e_card_type type)
       nfcerror_exit(pnd, "pn53x_transceive(..., READ_RECORD, ..)");
     show(ret, bufRx);
 
-    if(ret == 18) // empty transaction
+    if(ret != 18) // empty transaction
       continue;
 
     /* Look for date */
