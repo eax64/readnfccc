@@ -42,9 +42,6 @@ const uint8_t SELECT_APP2[] = {0x40,0x01,0x00,0xA4,0x04,0x00,0x07,0xA0,0x00,0x00
 const uint8_t READ_RECORD_VISA[] = {0x40, 0x01, 0x00, 0xB2, 0x02, 0x0C, 0x00, 0x00};
 const uint8_t READ_RECORD_MC[] = {0x40, 0x01, 0x00, 0xB2, 0x01, 0x14, 0x00, 0x00};
 
-
-const uint8_t READ_PIN_COUNTER[] = {0x80, 0xca, 0x9f, 0x17, 0x00};
-
 uint8_t READ_PAYLOG_VISA[] = {0x40, 0x01, 0x00, 0xB2, 0x01, 0x8C, 0x00, 0x00};
 uint8_t READ_PAYLOG_MC[] = {0x40, 0x01, 0x00, 0xB2, 0x01, 0x5C, 0x00, 0x00};
 
@@ -175,7 +172,7 @@ void		get_history(nfc_device *pnd, enum e_card_type type)
     sprintf(tmp, "%02x%02x", bufRx[10], bufRx[11]);
     currencyCode = atoi(tmp);
 
-    sprintf(msg, "%s\t%d,%02x %s\t(%s)",
+    sprintf(msg, "%s\t%d.%02x %s\t(%s)",
 	    msg,
 	    atoi(amount),
 	    bufRx[6],
@@ -210,11 +207,14 @@ int		main()
   if ((ret = pn53x_transceive(pnd, SELECT_APP, sizeof(SELECT_APP), bufRx, MAX_FRAME_LEN, 0)) < 0)
     nfcerror_exit(pnd, "pn53x_transceive(..., SELECT_APP, ..)");
 
+
   if ((ret = pn53x_transceive(pnd, READ_RECORD_VISA, sizeof(READ_RECORD_VISA), bufRx, MAX_FRAME_LEN, 0)) < 0)
     nfcerror_exit(pnd, "pn53x_transceive(..., SELECT_APP, ..)");
 
   get_info(bufRx, ret, CARD_TYPE_VISA);
   /* get_info(bufRx, ret, CARD_TYPE_MC); */
+
+
   get_history(pnd, CARD_TYPE_VISA);
   get_history(pnd, CARD_TYPE_MC);
 
