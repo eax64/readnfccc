@@ -12,12 +12,11 @@ NAME		=	readnfccc
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(ASMOBJ)
+$(NAME): $(OBJ)
 	$(CC)  $(LDFLAGS) -o $(NAME) $(OBJ)
 
 clean:
 	$(RM) $(OBJ)
-	$(RM) $(ASMOBJ)
 
 fclean: clean
 	$(RM) $(NAME)
